@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade de Recuperação Semestral - Matemática - 9º Ano</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --primary-light: #3b82f6;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-light: #64748b;
+            --success: #10b981;
+            --error: #ef4444;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+            border-left: 6px solid var(--primary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .student-info div span {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Toolbar & Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        select {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            background-color: #fff;
+            color: var(--text-color);
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--primary-light);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-toggle-study {
+            background-color: #475569;
+        }
+
+        .btn-toggle-study:hover {
+            background-color: #64748b;
+        }
+
+        /* Progress Bar Dashboard */
+        .progress-dashboard {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar-bg {
+            background-color: #e2e8f0;
+            height: 10px;
+            border-radius: 9999px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-light);
+            transition: width 0.3s ease-in-out;
+        }
+
+        .progress-bar-fill.success {
+            background-color: var(--success);
+        }
+
+        .stats-badges {
+            display: flex;
+            gap: 16px;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .badge-answered { background-color: #dbeafe; color: #1e40af; }
+        .badge-correct { background-color: #d1fae5; color: #065f46; }
+
+        /* Question Cards */
+        .question-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+        }
+
+        .question-topic {
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .option-item:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary-light);
+            background-color: #eff6ff;
+        }
+
+        .option-radio {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .option-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Verification & Action Container */
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        /* Feedback States */
+        .option-item.correct {
+            border-color: var(--success);
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+
+        .option-item.correct::after {
+            content: "✓";
+            position: absolute;
+            right: 16px;
+            font-weight: bold;
+            color: var(--success);
+        }
+
+        .option-item.wrong {
+            border-color: var(--error);
+            background-color: #fef2f2;
+            color: #991b1b;
+        }
+
+        .option-item.wrong::after {
+            content: "✗";
+            position: absolute;
+            right: 16px;
+            font-weight: bold;
+            color: var(--error);
+        }
+
+        /* Explanation Panel */
+        .explanation {
+            margin-top: 16px;
+            padding: 16px;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-light);
+            border-radius: 0 8px 8px 0;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .explanation h4 {
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .explanation p {
+            font-size: 0.95rem;
+            color: #334155;
+        }
+
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            header {
+                padding: 16px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="subtitle">Atividade de Recuperação Semestral</span>
+        <h1>Matemática — 9º Ano do Ensino Fundamental II</h1>
+        <div class="student-info" style="margin-top: 15px;">
+            <div><span>Professor(a):</span> Colégio Guroo</div>
+            <div><span>Turma:</span> 9º Ano</div>
+            <div><span>Ano Letivo:</span> 2026</div>
+        </div>
+    </header>
+
+    <!-- Progresso -->
+    <div class="progress-dashboard">
+        <div class="progress-stats">
+            <span>Progresso da Atividade</span>
+            <div class="stats-badges">
+                <span class="badge badge-answered" id="answered-counter">Respondidas: 0/16</span>
+                <span class="badge badge-correct" id="correct-counter">Acertos: 0</span>
+            </div>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- Controles/Filtros -->
+    <div class="controls">
+        <div class="filter-group">
+            <label for="topic-filter">Filtrar por Conteúdo:</label>
+            <select id="topic-filter" onchange="filterQuestions()">
+                <option value="all">Ver Todos os Conteúdos (16 questões)</option>
+                <option value="Adição e Subtração de Radicais">Adição e Subtração de Radicais</option>
+                <option value="Expressões com Radicais">Expressões com Radicais</option>
+                <option value="Racionalização de Denominador">Racionalização de Denominador</option>
+                <option value="Segmentos Proporcionais">Segmentos Proporcionais</option>
+                <option value="Semelhança">Semelhança</option>
+                <option value="Teorema de Tales">Teorema de Tales</option>
+                <option value="Equação do 2º Grau e Fórmula de Bhaskara">Equação do 2º Grau e Fórmula de Bhaskara</option>
+                <option value="Das Raízes ao Trinômio e Quantidade de Raízes Reais">Das Raízes ao Trinômio e Quantidade de Raízes Reais</option>
+            </select>
+        </div>
+        <button class="btn btn-toggle-study" id="study-mode-btn" onclick="toggleStudyMode()">
+            👁️ Mostrar Todas as Resoluções
+        </button>
+    </div>
+
+    <!-- Container das questões -->
+    <div id="questions-container"></div>
+</div>
+
+<script>
+    const questionsData = [
+        {
+            id: 1,
+            topic: "Adição e Subtração de Radicais",
+            text: "Ao simplificar a expressão numérica dada por <span class='math'>3√12 + 5√3 - √27</span> obtemos um único termo com radical irracional. Assinale a alternativa que apresenta esse resultado simplificado:",
+            options: {
+                A: "<span class='math'>5√3</span>",
+                B: "<span class='math'>8√3</span>",
+                C: "<span class='math'>11√3</span>",
+                D: "<span class='math'>14√3</span>",
+                E: "<span class='math'>15√3</span>"
+            },
+            correct: "B",
+            resolution: "Fatorando os radicais: <span class='math'>√12 = √(4 · 3) = 2√3</span>, logo <span class='math'>3√12 = 3 · 2√3 = 6√3</span>. Também temos <span class='math'>√27 = √(9 · 3) = 3√3</span>. Substituindo na expressão original: <span class='math'>6√3 + 5√3 - 3√3 = (6 + 5 - 3)√3 = 8√3</span>."
+        },
+        {
+            id: 2,
+            topic: "Adição e Subtração de Radicais",
+            text: "Determine o valor simplificado da expressão numérica representada pela soma e subtração dos seguintes radicais: <span class='math'>2√45 - 3√20 + √80</span>.",
+            options: {
+                A: "<span class='math'>2√5</span>",
+                B: "<span class='math'>3√5</span>",
+                C: "<span class='math'>4√5</span>",
+                D: "<span class='math'>5√5</span>",
+                E: "<span class='math'>6√5</span>"
+            },
+            correct: "C",
+            resolution: "Simplificando individualmente cada termo: <br>• <span class='math'>2√45 = 2 · √(9 · 5) = 2 · 3√5 = 6√5</span><br>• <span class='math'>3√20 = 3 · √(4 · 5) = 3 · 2√5 = 6√5</span><br>• <span class='math'>√80 = √(16 · 5) = 4√5</span><br>Efetuando as operações: <span class='math'>6√5 - 6√5 + 4√5 = 4√5</span>."
+        },
+        {
+            id: 3,
+            topic: "Expressões com Radicais",
+            text: "Na resolução de problemas geométricos, frequentemente nos deparamos com produtos notáveis envolvendo radicais. Calcule o produto <span class='math'>(√5 + √2) · (√5 - √2)</span> e marque a alternativa correta:",
+            options: {
+                A: "3",
+                B: "5",
+                C: "7",
+                D: "<span class='math'>√3</span>",
+                E: "<span class='math'>√10</span>"
+            },
+            correct: "A",
+            resolution: "Utilizando o produto notável do tipo produto da soma pela diferença de dois termos: <span class='math'>(a + b)(a - b) = a² - b²</span>. <br>Temos: <span class='math'>(√5)² - (√2)² = 5 - 2 = 3</span>."
+        },
+        {
+            id: 4,
+            topic: "Expressões com Radicais",
+            text: "Desenvolvendo o produto notável correspondente ao quadrado da soma de dois termos na expressão <span class='math'>(√3 + 2)²</span> encontramos qual dos seguintes valores?",
+            options: {
+                A: "<span class='math'>5 + 4√3</span>",
+                B: "<span class='math'>7 + 2√3</span>",
+                C: "<span class='math'>7 + 4√3</span>",
+                D: "<span class='math'>9 + 4√3</span>",
+                E: "11"
+            },
+            correct: "C",
+            resolution: "Aplicando a regra do produto notável <span class='math'>(a + b)² = a² + 2ab + b²</span>:<br><span class='math'>(√3 + 2)² = (√3)² + 2 · (√3) · (2) + 2² = 3 + 4√3 + 4 = 7 + 4√3</span>."
+        },
+        {
+            id: 5,
+            topic: "Racionalização de Denominador",
+            text: "Na matemática e nas áreas técnicas, é comum eliminarmos os radicais do denominador para facilitar estimativas e cálculos adicionais. Ao racionalizar e simplificar a fração <span class='math'>6 / √3</span>, qual expressão obtemos?",
+            options: {
+                A: "<span class='math'>√3</span>",
+                B: "<span class='math'>2√3</span>",
+                C: "<span class='math'>3√3</span>",
+                D: "<span class='math'>6√3</span>",
+                E: "12"
+            },
+            correct: "B",
+            resolution: "Multiplica-se o numerador e o denominador pelo fator racionalizante <span class='math'>√3</span>:<br><span class='math'>(6 · √3) / (√3 · √3) = 6√3 / 3 = 2√3</span>."
+        },
+        {
+            id: 6,
+            topic: "Racionalização de Denominador",
+            text: "Determine a fração equivalente com denominador racionalizado para a expressão <span class='math'>10 / (√7 - √2)</span>:",
+            options: {
+                A: "<span class='math'>2(√7 + √2)</span>",
+                B: "<span class='math'>2(√7 - √2)</span>",
+                C: "<span class='math'>5(√7 + √2)</span>",
+                D: "<span class='math'>10(√7 + √2)</span>",
+                E: "<span class='math'>√7 + √2</span>"
+            },
+            correct: "A",
+            resolution: "Racionalizando pelo conjugado do denominador, que é <span class='math'>(√7 + √2)</span>:<br><span class='math'>10 · (√7 + √2) / [(√7 - √2) · (√7 + √2)] = 10(√7 + √2) / (7 - 2) = 10(√7 + √2) / 5 = 2(√7 + √2)</span>."
+        },
+        {
+            id: 7,
+            topic: "Segmentos Proporcionais",
+            text: "Quatro segmentos de reta, AB, CD, EF e GH, formam, nesta ordem, uma proporção geométrica. Sabendo que as medidas desses segmentos são, respectivamente, AB = 4 cm, CD = 6 cm e EF = 8 cm, determine a medida do segmento GH:",
+            options: {
+                A: "10 cm",
+                B: "11 cm",
+                C: "12 cm",
+                D: "14 cm",
+                E: "16 cm"
+            },
+            correct: "C",
+            resolution: "Como os segmentos são proporcionais na ordem dada:<br><span class='math'>AB / CD = EF / GH => 4 / 6 = 8 / GH => 4 · GH = 48 => GH = 12</span> cm."
+        },
+        {
+            id: 8,
+            topic: "Segmentos Proporcionais",
+            text: "Uma determinada maquete utiliza segmentos de reta para representar as divisões de um terreno estruturado. Sabendo que os segmentos A, B, C e D são proporcionais nesta ordem, que a razão de proporcionalidade entre os dois primeiros é 2/3, e que a medida do segmento C é de 18 cm, calcule o comprimento do segmento D:",
+            options: {
+                A: "12 cm",
+                B: "20 cm",
+                C: "24 cm",
+                D: "27 cm",
+                E: "30 cm"
+            },
+            correct: "D",
+            resolution: "Respeitando a igualdade de razões dada por <span class='math'>A/B = C/D</span>, substituímos os valores conhecidos:<br><span class='math'>2/3 = 18 / D => 2 · D = 3 · 18 => 2D = 54 => D = 27</span> cm."
+        },
+        {
+            id: 9,
+            topic: "Semelhança",
+            text: "Um triângulo ABC possui lados medindo 6 cm, 8 cm e 10 cm. Um segundo triângulo, DEF, semelhante ao primeiro, possui o seu menor lado medindo 15 cm. Com base nessas informações, a medida do maior lado do triângulo DEF é igual a:",
+            options: {
+                A: "12 cm",
+                B: "20 cm",
+                C: "22 cm",
+                D: "24 cm",
+                E: "25 cm"
+            },
+            correct: "E",
+            resolution: "O menor lado do triângulo ABC mede 6 cm, e o menor do DEF mede 15 cm. A razão de semelhança <span class='math'>k</span> é: <span class='math'>k = 15 / 6 = 2,5</span>. <br>Multiplicando o maior lado do primeiro triângulo (10 cm) por essa razão, temos: <span class='math'>10 · 2,5 = 25</span> cm."
+        },
+        {
+            id: 10,
+            topic: "Semelhança",
+            text: "Dois retângulos são semelhantes entre si. O retângulo menor possui dimensões de 4 cm de largura por 9 cm de comprimento. Sabendo que a razão de semelhança do retângulo menor para o maior é de 1:3, assinale a alternativa que apresenta as dimensões corretas do retângulo maior:",
+            options: {
+                A: "8 cm por 18 cm",
+                B: "12 cm por 12 cm",
+                C: "12 cm por 27 cm",
+                D: "16 cm por 36 cm",
+                E: "20 cm por 45 cm"
+            },
+            correct: "C",
+            resolution: "Sendo a razão de semelhança de 1:3, todas as dimensões lineares correspondentes do retângulo maior serão triplicadas:<br>Largura: <span class='math'>4 · 3 = 12</span> cm<br>Comprimento: <span class='math'>9 · 3 = 27</span> cm."
+        },
+        {
+            id: 11,
+            topic: "Teorema de Tales",
+            text: "Um feixe de três retas paralelas a, b e c é cortado por duas retas transversais s e t. Os segmentos determinados sobre a transversal s medem, respectively, x e 12 cm. Os segmentos correspondentes determinados sobre a transversal t medem 5 cm e 15 cm. Utilizando o Teorema de Tales, determine o valor de x:",
+            options: {
+                A: "3 cm",
+                B: "4 cm",
+                C: "6 cm",
+                D: "8 cm",
+                E: "9 cm"
+            },
+            correct: "B",
+            resolution: "Pelo Teorema de Tales: <span class='math'>x / 12 = 5 / 15</span>.<br>Simplificando a segunda fração para <span class='math'>1 / 3</span>, temos:<br><span class='math'>x / 12 = 1 / 3 => 3x = 12 => x = 4</span> cm."
+        },
+        {
+            id: 12,
+            topic: "Teorema de Tales",
+            text: "Três terrenos vizinhos possuem frentes para a Rua das Flores e para a Rua das Palmeiras. As divisórias laterais dos terrenos são perpendiculares à Rua das Flores. Se as frentes desses terrenos na Rua das Flores medem 15 m, 20 m e 25 m, e a frente total do bloco somada na Rua das Palmeiras mede 120 m, a medida da frente do menor terreno voltada para a Rua das Palmeiras é de:",
+            options: {
+                A: "30 m",
+                B: "40 m",
+                C: "45 m",
+                D: "50 m",
+                E: "60 m"
+            },
+            correct: "A",
+            resolution: "A soma total das frentes na Rua das Flores é de <span class='math'>15 + 20 + 25 = 60</span> m. O menor terreno tem frente de 15 m na Rua das Flores. Pelo Teorema de Tales, a proporção com o todo se mantém:<br><span class='math'>15 / 60 = x / 120 => 1 / 4 = x / 120 => 4x = 120 => x = 30</span> m."
+        },
+        {
+            id: 13,
+            topic: "Equação do 2º Grau e Fórmula de Bhaskara",
+            text: "Ao analisar a trajetória parabólica de um objeto, determinou-se a equação do 2º grau <span class='math'>x² - 7x + 10 = 0</span>. Utilizando a Fórmula de Bhaskara, determine o conjunto solução S que representa os instantes em que o objeto toca o solo:",
+            options: {
+                A: "<span class='math'>S = {1, 10}</span>",
+                B: "<span class='math'>S = {2, 5}</span>",
+                C: "<span class='math'>S = {-2, -5}</span>",
+                D: "<span class='math'>S = {3, 4}</span>",
+                E: "<span class='math'>S = {-1, -10}</span>"
+            },
+            correct: "B",
+            resolution: "Identificando os coeficientes: <span class='math'>a = 1</span>, <span class='math'>b = -7</span>, <span class='math'>c = 10</span>.<br>Calculando o discriminante:<br><span class='math'>Δ = b² - 4ac = (-7)² - 4 · 1 · 10 = 49 - 40 = 9</span>.<br>Aplicando Bhaskara:<br><span class='math'>x = [-b ± √Δ] / 2a = [-(-7) ± √9] / (2 · 1) = [7 ± 3] / 2</span>.<br>As raízes são:<br><span class='math'>x₁ = (7 + 3) / 2 = 5</span><br><span class='math'>x₂ = (7 - 3) / 2 = 2</span>.<br>Portanto, <span class='math'>S = {2, 5}</span>."
+        },
+        {
+            id: 14,
+            topic: "Equação do 2º Grau e Fórmula de Bhaskara",
+            text: "Encontre a maior raiz real correspondente à equação de segundo grau definida por <span class='math'>2x² - 5x - 3 = 0</span>:",
+            options: {
+                A: "-1/2",
+                B: "1",
+                C: "2",
+                D: "3",
+                E: "5"
+            },
+            correct: "D",
+            resolution: "Identificando os coeficientes: <span class='math'>a = 2</span>, <span class='math'>b = -5</span>, <span class='math'>c = -3</span>.<br>Calculando o discriminante:<br><span class='math'>Δ = b² - 4ac = (-5)² - 4 · 2 · (-3) = 25 + 24 = 49</span>.<br>Aplicando Bhaskara:<br><span class='math'>x = [5 ± √49] / (2 · 2) = [5 ± 7] / 4</span>.<br>As raízes são:<br><span class='math'>x₁ = (5 + 7) / 4 = 12 / 4 = 3</span><br><span class='math'>x₂ = (5 - 7) / 4 = -2 / 4 = -1/2</span>.<br>A maior raiz real é 3."
+        },
+        {
+            id: 15,
+            topic: "Das Raízes ao Trinômio e Quantidade de Raízes Reais",
+            text: "Sem resolver a equação de segundo grau <span class='math'>3x² - 2x + 5 = 0</span>, analise o valor do discriminante (<span class='math'>Δ</span>) e identifique a afirmação correta sobre a quantidade e natureza de suas raízes no conjunto dos números reais:",
+            options: {
+                A: "A equação não possui raízes reais.",
+                B: "A equação possui uma única raiz real (raízes reais e iguais).",
+                C: "A equação possui duas raízes reais e distintas.",
+                D: "A equação possui três raízes reais distintas.",
+                E: "A equação possui infinitas soluções reais."
+            },
+            correct: "A",
+            resolution: "Identificando os coeficientes: <span class='math'>a = 3</span>, <span class='math'>b = -2</span>, <span class='math'>c = 5</span>.<br>Calculando o discriminante:<br><span class='math'>Δ = b² - 4ac = (-2)² - 4 · 3 · 5 = 4 - 60 = -56</span>.<br>Como o discriminante é menor que zero (<span class='math'>Δ &lt; 0</span>), a equação não possui raízes reais."
+        },
+        {
+            id: 16,
+            topic: "Das Raízes ao Trinômio e Quantidade de Raízes Reais",
+            text: "Um polinômio do segundo grau da forma <span class='math'>x² - Sx + P = 0</span> (onde S representa a soma das raízes e P o produto) possui as raízes <span class='math'>x₁ = -3</span> e <span class='math'>x₂ = 7</span>. Qual equação do 2º grau representa corretamente esse trinômio?",
+            options: {
+                A: "<span class='math'>x² + 4x - 21 = 0</span>",
+                B: "<span class='math'>x² - 4x - 21 = 0</span>",
+                C: "<span class='math'>x² - 4x + 21 = 0</span>",
+                D: "<span class='math'>x² + 10x - 21 = 0</span>",
+                E: "<span class='math'>x² - 10x + 21 = 0</span>"
+            },
+            correct: "B",
+            resolution: "A soma das raízes é dada por: <span class='math'>S = x₁ + x₂ = -3 + 7 = 4</span>.<br>O produto das raízes é dado por: <span class='math'>P = x₁ · x₂ = -3 · 7 = -21</span>.<br>Substituindo na estrutura padrão <span class='math'>x² - Sx + P = 0</span>, obtemos:<br><span class='math'>x² - 4x - 21 = 0</span>."
+        }
+    ];
+
+    let answersState = {}; // Guarda a alternativa escolhida por questão { 1: 'A', 2: 'C' }
+    let confirmedQuestions = {}; // Guarda se a questão já foi confirmada { 1: true }
+    let globalStudyMode = false;
+
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        const filterVal = document.getElementById('topic-filter').value;
+        container.innerHTML = '';
+
+        const filtered = questionsData.filter(q => filterVal === 'all' || q.topic === filterVal);
+
+        filtered.forEach((q) => {
+            const isConfirmed = confirmedQuestions[q.id];
+            const chosen = answersState[q.id];
+
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${q.id}`;
+
+            let optionsHtml = '';
+            for (let letter in q.options) {
+                let stateClass = '';
+                let disabledAttr = isConfirmed ? 'disabled' : '';
+
+                if (isConfirmed) {
+                    if (letter === q.correct) {
+                        stateClass = 'correct';
+                    } else if (letter === chosen) {
+                        stateClass = 'wrong';
+                    }
+                } else if (chosen === letter) {
+                    stateClass = 'selected';
+                }
+
+                optionsHtml += `
+                    <li class="option-item ${stateClass}" onclick="selectOption(${q.id}, '${letter}')">
+                        <input type="radio" name="q-${q.id}" class="option-radio" value="${letter}" 
+                               ${chosen === letter ? 'checked' : ''} ${disabledAttr}>
+                        <span class="option-text"><strong>${letter})</strong> ${q.options[letter]}</span>
+                    </li>
+                `;
+            }
+
+            const showExplanation = isConfirmed || globalStudyMode;
+
+            card.innerHTML = `
+                <span class="question-topic">${q.topic}</span>
+                <div class="question-text"><strong>Questão ${q.id}.</strong> ${q.text}</div>
+                <ul class="options-list">
+                    ${optionsHtml}
+                </ul>
+                <div class="card-actions">
+                    <button class="btn" id="confirm-btn-${q.id}" onclick="confirmAnswer(${q.id})" 
+                            ${isConfirmed || !chosen ? 'disabled' : ''} 
+                            style="${isConfirmed ? 'background-color: #94a3b8; cursor: not-allowed;' : ''}">
+                        Confirmar Resposta
+                    </button>
+                </div>
+                <div class="explanation" id="explanation-${q.id}" style="display: ${showExplanation ? 'block' : 'none'}">
+                    <h4>Resolução Passo a Passo:</h4>
+                    <p>${q.resolution}</p>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        updateProgress();
+    }
+
+    window.selectOption = function(qId, letter) {
+        if (confirmedQuestions[qId]) return;
+        answersState[qId] = letter;
+        renderQuestions();
+    };
+
+    window.confirmAnswer = function(qId) {
+        if (!answersState[qId] || confirmedQuestions[qId]) return;
+        confirmedQuestions[qId] = true;
+        renderQuestions();
+    };
+
+    window.filterQuestions = function() {
+        renderQuestions();
+    };
+
+    window.toggleStudyMode = function() {
+        globalStudyMode = !globalStudyMode;
+        const btn = document.getElementById('study-mode-btn');
+        if (globalStudyMode) {
+            btn.innerHTML = '👁️ Ocultar Resoluções (Modo Aluno)';
+            btn.style.backgroundColor = '#0284c7';
+        } else {
+            btn.innerHTML = '👁️ Mostrar Todas as Resoluções';
+            btn.style.backgroundColor = '#475569';
+        }
+        renderQuestions();
+    };
+
+    function updateProgress() {
+        const total = questionsData.length;
+        const answered = Object.keys(confirmedQuestions).length;
+        let correct = 0;
+
+        for (let qId in confirmedQuestions) {
+            const q = questionsData.find(x => x.id == qId);
+            if (answersState[qId] === q.correct) {
+                correct++;
+            }
+        }
+
+        document.getElementById('answered-counter').innerText = `Respondidas: ${answered}/${total}`;
+        document.getElementById('correct-counter').innerText = `Acertos: ${correct}`;
+
+        const fill = document.getElementById('progress-bar-fill');
+        const percent = (answered / total) * 100;
+        fill.style.width = `${percent}%`;
+
+        if (percent === 100) {
+            fill.classList.add('success');
+        } else {
+            fill.classList.remove('success');
+        }
+    }
+
+    // Inicialização
+    renderQuestions();
+</script>
+
+</body>
+</html>
